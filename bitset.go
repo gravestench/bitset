@@ -256,3 +256,18 @@ func clearBit(n, pos uint64) uint64 {
 func getBit(n, pos uint64) bool {
 	return (n & (1 << pos)) > 0
 }
+
+func (bs *BitSet) ToIntArray() []uint64 {
+	result := make([]uint64, 0)
+
+	numGroups := len(bs.groups)
+	for groupIdx := 0; groupIdx < numGroups; groupIdx++ {
+		for bitIdx := 0; bitIdx < overflow; bitIdx++ {
+			if (bs.groups[groupIdx]>>bitIdx)&0b1 > 0 {
+				result = append(result, uint64((groupIdx*overflow)+bitIdx))
+			}
+		}
+	}
+
+	return result
+}
